@@ -1,0 +1,7 @@
+name: sef-corporativo
+description: Política fictícia para demonstração; não representa normas reais da SEF-MG.
+labels:
+  - konveyor.io/target=cloud-readiness
+  - konveyor.io/target=jakarta-ee
+  - konveyor.io/target=eap8
+  - konveyor.io/target=openjdk17

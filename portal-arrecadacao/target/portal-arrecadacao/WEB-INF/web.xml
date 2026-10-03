@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="3.1">
+ <display-name>Portal de arrecadação fictício</display-name>
+ <servlet><servlet-name>portal</servlet-name><servlet-class>br.gov.mg.sef.demo.PortalServlet</servlet-class></servlet>
+ <servlet-mapping><servlet-name>portal</servlet-name><url-pattern>/</url-pattern></servlet-mapping>
+ <session-config><session-timeout>20</session-timeout></session-config>
+</web-app>

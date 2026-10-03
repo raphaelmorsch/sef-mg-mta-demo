@@ -1,0 +1,12 @@
+- ruleID: sef-mainframe-direto-00001
+  description: Integração direta com hostname de mainframe legado
+  category: mandatory
+  effort: 3
+  message: >-
+    Política FICTÍCIA da demo: substituir o endpoint direto por API institucional
+    via gateway. Externalizar a URL; definir autenticação, timeout e retry limitado.
+    Apenas mover a string para uma variável não elimina o acoplamento arquitetural.
+  when:
+    builtin.filecontent:
+      pattern: 'mainframe\.sef-demo\.invalid'
+      filePattern: '.*\.java$'
