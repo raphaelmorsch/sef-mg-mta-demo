@@ -1,0 +1,1330 @@
+# Questionário proposto para MTA 7.3. Importar pela tela Assessment questionnaires.
+name: SEF-MG - Arquitetura e Modernização para OpenShift - v1.0
+description: Avaliação em português inspirada nos temas do Legacy Pathfinder e ampliada para discussão na Secretaria
+  de Estado de Fazenda de Minas Gerais. Conteúdo proposto, não oficial. Avalia riscos atuais e evidências para modularização,
+  extração seletiva de serviços e prontidão operacional. Não presume que todo monólito deva virar microserviços.
+required: true
+sections:
+- order: 1
+  name: 01. Contexto fazendário e conhecimento da aplicação
+  comment: Exemplos de capacidades são hipóteses para discussão com a SEF/MG, não descrição de sua arquitetura atual.
+  questions:
+  - order: 1
+    text: '[CTX01] Os fluxos fazendários críticos e seus responsáveis estão identificados?'
+    explanation: 'Evidências: mapa de fluxos de cadastro, arrecadação, fiscalização ou atendimento, conforme o escopo.
+      Considere o estado atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior
+      risco material e registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Fluxos, responsáveis e impactos de indisponibilidade estão documentados e validados.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há mapa parcial ou responsáveis informais.
+      risk: yellow
+      rationale: Existe atendimento parcial. Uma mudança técnica pode interromper processos essenciais sem que o
+        impacto seja compreendido.
+      mitigation: Mapear jornadas com negócio e TI e definir donos por capacidade.
+    - order: 3
+      text: Não há mapa confiável nem responsável pelos fluxos críticos.
+      risk: red
+      rationale: Uma mudança técnica pode interromper processos essenciais sem que o impacto seja compreendido.
+      mitigation: Mapear jornadas com negócio e TI e definir donos por capacidade.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: mapa de fluxos de cadastro, arrecadação, fiscalização ou atendimento,
+        conforme o escopo.'
+  - order: 2
+    text: '[CTX02] A equipe consegue explicar e alterar as regras de negócio com segurança?'
+    explanation: 'Evidências: documentação, histórico de alterações e disponibilidade de especialistas. Considere
+      o estado atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material
+      e registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Há especialistas, documentação atual e capacidade de manutenção demonstrada.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: O conhecimento está concentrado em poucas pessoas ou a documentação é parcial.
+      risk: yellow
+      rationale: Existe atendimento parcial. Regras tributárias pouco compreendidas aumentam o risco de regressão.
+      mitigation: Registrar regras e decisões e criar testes de caracterização com especialistas.
+    - order: 3
+      text: Não há especialistas disponíveis ou a manutenção depende de tentativa e erro.
+      risk: red
+      rationale: Regras tributárias pouco compreendidas aumentam o risco de regressão.
+      mitigation: Registrar regras e decisões e criar testes de caracterização com especialistas.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: documentação, histórico de alterações e disponibilidade de
+        especialistas.'
+  - order: 3
+    text: '[CTX03] Picos, prazos e objetivos de continuidade orientam a arquitetura?'
+    explanation: 'Evidências: volumetria, calendário fiscal, latência, RTO e RPO acordados. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Os objetivos são conhecidos e foram testados em carga e recuperação.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há estimativas ou objetivos definidos, mas sem teste completo.
+      risk: yellow
+      rationale: Existe atendimento parcial. Indisponibilidade em prazos críticos pode comprometer atendimento e
+        processamento.
+      mitigation: Acordar metas com o negócio e testar os picos e a recuperação.
+    - order: 3
+      text: Não há objetivos ou o sistema já falha em períodos críticos sem tratamento.
+      risk: red
+      rationale: Indisponibilidade em prazos críticos pode comprometer atendimento e processamento.
+      mitigation: Acordar metas com o negócio e testar os picos e a recuperação.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: volumetria, calendário fiscal, latência, RTO e RPO acordados.'
+  - order: 4
+    text: '[CTX04] Existe visão atual da arquitetura e das dependências externas?'
+    explanation: 'Evidências: diagramas de contexto e componentes, inventário de runtimes e interfaces. Considere
+      o estado atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material
+      e registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Visão atualizada identifica componentes, tecnologias, responsáveis e dependências.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Diagramas ou inventários existem, mas estão incompletos.
+      risk: yellow
+      rationale: Existe atendimento parcial. Dependências ocultas tornam a modernização imprevisível.
+      mitigation: Construir mapa de dependências e validá-lo com execução e equipes consumidoras.
+    - order: 3
+      text: Dependências e componentes só são descobertos durante incidentes.
+      risk: red
+      rationale: Dependências ocultas tornam a modernização imprevisível.
+      mitigation: Construir mapa de dependências e validá-lo com execução e equipes consumidoras.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: diagramas de contexto e componentes, inventário de runtimes
+        e interfaces.'
+- order: 2
+  name: 02. Monólito, modularidade e acoplamento
+  comment: Um monólito modular pode ser adequado. Serviços distribuídos também podem apresentar acoplamento elevado.
+  questions:
+  - order: 1
+    text: '[ARQ01] Como as capacidades de negócio estão separadas no código?'
+    explanation: 'Evidências: estrutura de módulos e regras de dependência. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Há módulos coesos e fronteiras verificadas, em monólito ou serviços.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há separação parcial, com violações conhecidas.
+      risk: yellow
+      rationale: Existe atendimento parcial. A mistura de responsabilidades amplia o impacto de cada alteração.
+      mitigation: Criar módulos por capacidade e impedir novas dependências cíclicas.
+    - order: 3
+      text: Regras de vários domínios estão misturadas e há dependências cíclicas frequentes.
+      risk: red
+      rationale: A mistura de responsabilidades amplia o impacto de cada alteração.
+      mitigation: Criar módulos por capacidade e impedir novas dependências cíclicas.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: estrutura de módulos e regras de dependência.'
+  - order: 2
+    text: '[ARQ02] Uma alteração localizada exige mudanças em outros módulos ou sistemas?'
+    explanation: 'Evidências: histórico de três mudanças recentes e seu impacto. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Mudanças normalmente ficam no domínio responsável, com contratos estáveis.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Algumas mudanças atravessam domínios e exigem coordenação manual.
+      risk: yellow
+      rationale: Existe atendimento parcial. O acoplamento de mudança reduz autonomia e aumenta regressões.
+      mitigation: Identificar dependências recorrentes e introduzir contratos e encapsulamento.
+    - order: 3
+      text: Mudanças pequenas exigem alterações simultâneas em vários sistemas.
+      risk: red
+      rationale: O acoplamento de mudança reduz autonomia e aumenta regressões.
+      mitigation: Identificar dependências recorrentes e introduzir contratos e encapsulamento.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: histórico de três mudanças recentes e seu impacto.'
+  - order: 3
+    text: '[ARQ03] É possível evoluir e publicar as unidades arquiteturais na cadência necessária?'
+    explanation: 'Evidências: pipeline e histórico de releases. Considere o estado atual comprovado, não apenas
+      planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa na
+      revisão.'
+    answers:
+    - order: 1
+      text: A unidade de implantação atende à cadência necessária; serviços, se existentes, evoluem com compatibilidade.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há coordenação ocasional ou gargalos de publicação conhecidos.
+      risk: yellow
+      rationale: Existe atendimento parcial. O acoplamento de implantação impede entregas independentes quando necessárias.
+      mitigation: Reduzir dependências de release e avaliar extração apenas onde há benefício comprovado.
+    - order: 3
+      text: Há releases sincronizados obrigatórios entre sistemas ou um pacote único bloqueia necessidades distintas.
+      risk: red
+      rationale: O acoplamento de implantação impede entregas independentes quando necessárias.
+      mitigation: Reduzir dependências de release e avaliar extração apenas onde há benefício comprovado.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: pipeline e histórico de releases.'
+  - order: 4
+    text: '[ARQ04] As partes com maior carga podem ser escaladas de forma economicamente adequada?'
+    explanation: 'Evidências: perfil de consumo por fluxo e resultados de testes. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: A escala atual atende às metas e ao custo, com isolamento onde necessário.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Escalar tudo atende parcialmente, com desperdício ou contenção moderada.
+      risk: yellow
+      rationale: Existe atendimento parcial. A disputa de recursos amplia o raio de impacto de picos.
+      mitigation: Medir gargalos e isolar pools, processos ou serviços conforme a necessidade.
+    - order: 3
+      text: Um fluxo satura recursos e derruba outros, sem isolamento ou capacidade viável.
+      risk: red
+      rationale: A disputa de recursos amplia o raio de impacto de picos.
+      mitigation: Medir gargalos e isolar pools, processos ou serviços conforme a necessidade.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: perfil de consumo por fluxo e resultados de testes.'
+- order: 3
+  name: 03. Fronteiras de domínio e decomposição
+  comment: Avaliar modularização antes de distribuir. Microserviços exigem motivação, autonomia e capacidade operacional.
+  questions:
+  - order: 1
+    text: '[DOM01] As fronteiras de domínio foram validadas com especialistas do negócio?'
+    explanation: 'Evidências: mapa de contextos, linguagem de negócio e decisões de arquitetura. Considere o estado
+      atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e
+      registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Capacidades, regras e interfaces têm fronteiras acordadas.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há proposta técnica de divisão ainda não validada pelo negócio.
+      risk: yellow
+      rationale: Existe atendimento parcial. Fronteiras inadequadas podem criar um monólito distribuído.
+      mitigation: Realizar oficina de domínio e validar contextos e invariantes com especialistas.
+    - order: 3
+      text: A divisão segue apenas tabelas ou camadas técnicas, misturando responsabilidades.
+      risk: red
+      rationale: Fronteiras inadequadas podem criar um monólito distribuído.
+      mitigation: Realizar oficina de domínio e validar contextos e invariantes com especialistas.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: mapa de contextos, linguagem de negócio e decisões de arquitetura.'
+  - order: 2
+    text: '[DOM02] A decisão de manter o monólito ou extrair serviços tem justificativa mensurável?'
+    explanation: 'Evidências: registro de decisão e metas de prazo, escala, custo e disponibilidade. Considere o
+      estado atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material
+      e registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: A decisão compara alternativas e demonstra benefício; manter monólito modular é uma opção válida.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há hipótese de benefício, mas sem métricas ou comparação completa.
+      risk: yellow
+      rationale: Existe atendimento parcial. Distribuição sem benefício pode elevar custo e complexidade operacional.
+      mitigation: Comparar modularização interna, replatform e extração seletiva com métricas.
+    - order: 3
+      text: Pretende-se extrair serviços por padrão ou manter gargalos sem avaliar alternativas.
+      risk: red
+      rationale: Distribuição sem benefício pode elevar custo e complexidade operacional.
+      mitigation: Comparar modularização interna, replatform e extração seletiva com métricas.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: registro de decisão e metas de prazo, escala, custo e disponibilidade.'
+  - order: 3
+    text: '[DOM03] Existe estratégia incremental e reversível para a mudança arquitetural?'
+    explanation: 'Evidências: plano de transição, roteamento, coexistência e retorno. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Há etapas pequenas, critérios de aceite, coexistência e retorno; ou a manutenção da arquitetura está
+        justificada.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Existe piloto, mas coexistência ou retorno ainda não estão resolvidos.
+      risk: yellow
+      rationale: Existe atendimento parcial. Uma transição de grande porte concentra risco operacional.
+      mitigation: Definir fatia de negócio, camada de adaptação e piloto com reversão.
+    - order: 3
+      text: A mudança depende de substituição integral sem retorno testável.
+      risk: red
+      rationale: Uma transição de grande porte concentra risco operacional.
+      mitigation: Definir fatia de negócio, camada de adaptação e piloto com reversão.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: plano de transição, roteamento, coexistência e retorno.'
+  - order: 4
+    text: '[DOM04] Cada unidade tem responsabilidade de equipe e capacidade de operação compatíveis?'
+    explanation: 'Evidências: responsáveis, plantão, acordos entre equipes e backlog. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Há responsabilidade pelo ciclo completo de cada unidade, compatível com sua arquitetura.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Responsabilidades existem, mas dependem de muitos repasses.
+      risk: yellow
+      rationale: Existe atendimento parcial. Fragmentação sem ownership aumenta falhas e tempo de recuperação.
+      mitigation: Acordar responsabilidades, suporte e capacidade antes de ampliar o número de serviços.
+    - order: 3
+      text: Serviços são propostos ou operados sem responsáveis e suporte definidos.
+      risk: red
+      rationale: Fragmentação sem ownership aumenta falhas e tempo de recuperação.
+      mitigation: Acordar responsabilidades, suporte e capacidade antes de ampliar o número de serviços.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: responsáveis, plantão, acordos entre equipes e backlog.'
+- order: 4
+  name: 04. Dados, banco compartilhado e transações
+  comment: Priorizar propriedade lógica dos dados e integridade; não exigir um servidor físico de banco por serviço.
+  questions:
+  - order: 1
+    text: '[DAD01] Quem pode ler e alterar os dados de cada domínio?'
+    explanation: 'Evidências: matriz de acesso, schemas e SQL entre aplicações. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Há dono por conjunto de dados e escrita encapsulada; compartilhamento físico tem isolamento lógico controlado.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há leituras diretas entre domínios ou exceções de escrita conhecidas.
+      risk: yellow
+      rationale: Existe atendimento parcial. Banco compartilhado pode acoplar regras e implantação e comprometer
+        integridade.
+      mitigation: Definir proprietário de escrita e substituir acessos cruzados por contratos apropriados.
+    - order: 3
+      text: Múltiplas aplicações gravam nas mesmas tabelas sem dono ou contrato.
+      risk: red
+      rationale: Banco compartilhado pode acoplar regras e implantação e comprometer integridade.
+      mitigation: Definir proprietário de escrita e substituir acessos cruzados por contratos apropriados.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: matriz de acesso, schemas e SQL entre aplicações.'
+  - order: 2
+    text: '[DAD02] As regras em procedures e triggers estão mapeadas e testadas?'
+    explanation: 'Evidências: inventário de rotinas e seus consumidores. Considere o estado atual comprovado, não
+      apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Regras e dependências estão documentadas e testadas, ou não há regras no banco após verificação.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há regras conhecidas, mas cobertura e dependências são parciais.
+      risk: yellow
+      rationale: Existe atendimento parcial. Extrair código sem essas regras pode alterar o comportamento fiscal.
+      mitigation: Mapear rotinas, caracterizar o comportamento e decidir onde cada regra deve residir.
+    - order: 3
+      text: Regras críticas estão ocultas em rotinas compartilhadas sem testes.
+      risk: red
+      rationale: Extrair código sem essas regras pode alterar o comportamento fiscal.
+      mitigation: Mapear rotinas, caracterizar o comportamento e decidir onde cada regra deve residir.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: inventário de rotinas e seus consumidores.'
+  - order: 3
+    text: '[DAD03] As transações preservam as invariantes de negócio na arquitetura proposta?'
+    explanation: 'Evidências: limites transacionais, reconciliação e cenários de falha. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: A atomicidade necessária permanece local ou há consistência e compensação validadas.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Transações cruzadas são conhecidas, mas falhas e compensação não foram validadas.
+      risk: yellow
+      rationale: Existe atendimento parcial. Falhas parciais podem gerar lançamentos inconsistentes ou duplicados.
+      mitigation: Definir invariantes com negócio, manter juntas as operações inseparáveis e testar compensação
+        quando cabível.
+    - order: 3
+      text: A divisão quebra atomicidade necessária ou depende de transações distribuídas sem estratégia testada.
+      risk: red
+      rationale: Falhas parciais podem gerar lançamentos inconsistentes ou duplicados.
+      mitigation: Definir invariantes com negócio, manter juntas as operações inseparáveis e testar compensação
+        quando cabível.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: limites transacionais, reconciliação e cenários de falha.'
+  - order: 4
+    text: '[DAD04] É possível evoluir e migrar os dados sem interrupção incompatível com o negócio?'
+    explanation: 'Evidências: migrações versionadas, compatibilidade, reconciliação e restauração. Considere o estado
+      atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e
+      registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Há migrações compatíveis e testadas, reconciliação e retorno ou recuperação definidos.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Migrações são versionadas, mas exigem janela ou validação manual relevante.
+      risk: yellow
+      rationale: Existe atendimento parcial. Mudanças de schema podem interromper consumidores ou perder informação.
+      mitigation: Testar expansão e contração de schema, reconciliação e recuperação com volume representativo.
+    - order: 3
+      text: Alterações manuais e incompatíveis afetam vários sistemas sem recuperação comprovada.
+      risk: red
+      rationale: Mudanças de schema podem interromper consumidores ou perder informação.
+      mitigation: Testar expansão e contração de schema, reconciliação e recuperação com volume representativo.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: migrações versionadas, compatibilidade, reconciliação e restauração.'
+- order: 5
+  name: 05. Integrações, contratos e resiliência
+  comment: Inclui integrações internas, órgãos parceiros, bancos e provedores somente quando presentes no escopo.
+  questions:
+  - order: 1
+    text: '[INT01] As integrações têm contratos e responsáveis conhecidos?'
+    explanation: 'Evidências: catálogo de APIs, arquivos, filas, consumidores e acordos. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Contratos, responsáveis, autenticação e limites estão documentados.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há inventário parcial ou contratos informais.
+      risk: yellow
+      rationale: Existe atendimento parcial. Alterações podem quebrar fluxos entre organizações.
+      mitigation: Catalogar interfaces e estabelecer contratos e responsáveis com os consumidores.
+    - order: 3
+      text: Interfaces críticas são desconhecidas ou dependem de formatos não controlados.
+      risk: red
+      rationale: Alterações podem quebrar fluxos entre organizações.
+      mitigation: Catalogar interfaces e estabelecer contratos e responsáveis com os consumidores.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: catálogo de APIs, arquivos, filas, consumidores e acordos.'
+  - order: 2
+    text: '[INT02] Mudanças de interface preservam os consumidores?'
+    explanation: 'Evidências: política de versão e testes de contrato. Considere o estado atual comprovado, não
+      apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Compatibilidade e descontinuação são geridas e testadas.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há versionamento, mas validação de consumidores é parcial.
+      risk: yellow
+      rationale: Existe atendimento parcial. Contratos instáveis reproduzem acoplamento entre aplicações.
+      mitigation: Definir compatibilidade, período de transição e testes de contrato.
+    - order: 3
+      text: Mudanças incompatíveis exigem atualizar todos os consumidores ao mesmo tempo.
+      risk: red
+      rationale: Contratos instáveis reproduzem acoplamento entre aplicações.
+      mitigation: Definir compatibilidade, período de transição e testes de contrato.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: política de versão e testes de contrato.'
+  - order: 3
+    text: '[INT03] A aplicação suporta lentidão e indisponibilidade de dependências?'
+    explanation: 'Evidências: timeouts, tentativas limitadas, isolamento e testes de falha. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Falhas são limitadas por timeouts e isolamento e o comportamento foi testado.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Alguns controles existem, mas faltam limites ou testes.
+      risk: yellow
+      rationale: Existe atendimento parcial. Uma dependência indisponível pode paralisar toda a aplicação.
+      mitigation: Definir timeouts, retentativas com limite e backoff e testar degradação controlada.
+    - order: 3
+      text: Chamadas bloqueiam indefinidamente ou propagam falhas em cascata.
+      risk: red
+      rationale: Uma dependência indisponível pode paralisar toda a aplicação.
+      mitigation: Definir timeouts, retentativas com limite e backoff e testar degradação controlada.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: timeouts, tentativas limitadas, isolamento e testes de falha.'
+  - order: 4
+    text: '[INT04] Repetições e falhas de mensagens ou lotes são tratadas com segurança?'
+    explanation: 'Evidências: chaves de idempotência, reprocessamento, filas de erro e conciliação. Considere o
+      estado atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material
+      e registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Há idempotência, rastreio e recuperação comprovados, ou inexistência verificada de fluxos sujeitos a
+        repetição.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Existe recuperação manual ou cobertura parcial.
+      risk: yellow
+      rationale: Existe atendimento parcial. Reprocessamentos podem duplicar arrecadações, notificações ou atualizações.
+      mitigation: Definir idempotência, deduplicação, conciliação e tratamento de mensagens problemáticas.
+    - order: 3
+      text: Retentativas podem duplicar efeitos ou perder operações sem detecção.
+      risk: red
+      rationale: Reprocessamentos podem duplicar arrecadações, notificações ou atualizações.
+      mitigation: Definir idempotência, deduplicação, conciliação e tratamento de mensagens problemáticas.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: chaves de idempotência, reprocessamento, filas de erro e conciliação.'
+- order: 6
+  name: 06. Estado, sessão, arquivos e processamento
+  comment: Avaliar reinício, múltiplas réplicas e execução de tarefas sem dependência oculta de uma máquina.
+  questions:
+  - order: 1
+    text: '[EST01] A sessão do usuário sobrevive à troca de réplica ou reinício?'
+    explanation: 'Evidências: teste de sessão entre réplicas e reinício de pod. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Não há sessão de servidor ou ela é externalizada com segurança e continuidade testada.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há afinidade de sessão ou replicação parcial com limitações conhecidas.
+      risk: yellow
+      rationale: Existe atendimento parcial. Dependência de uma réplica dificulta escala e atualizações.
+      mitigation: Externalizar o estado necessário ou redesenhar a sessão e testar perda de réplica.
+    - order: 3
+      text: A sessão fica apenas na memória local e sua perda interrompe fluxos críticos.
+      risk: red
+      rationale: Dependência de uma réplica dificulta escala e atualizações.
+      mitigation: Externalizar o estado necessário ou redesenhar a sessão e testar perda de réplica.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: teste de sessão entre réplicas e reinício de pod.'
+  - order: 2
+    text: '[EST02] Arquivos e documentos necessários sobrevivem à substituição do contêiner?'
+    explanation: 'Evidências: inventário de arquivos e teste de persistência. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Dados duráveis usam armazenamento adequado e testado; temporários podem ser descartados.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há volumes ou compartilhamentos com limites ainda não testados.
+      risk: yellow
+      rationale: Existe atendimento parcial. Recriação de pods pode perder documentos e resultados.
+      mitigation: Separar temporários e dados duráveis e validar acesso, persistência e recuperação.
+    - order: 3
+      text: Documentos ou resultados importantes ficam no filesystem efêmero.
+      risk: red
+      rationale: Recriação de pods pode perder documentos e resultados.
+      mitigation: Separar temporários e dados duráveis e validar acesso, persistência e recuperação.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: inventário de arquivos e teste de persistência.'
+  - order: 3
+    text: '[EST03] Tarefas agendadas e lotes funcionam corretamente com várias réplicas?'
+    explanation: 'Evidências: agendadores, locks, checkpoints e reinício de lotes. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Há coordenação, idempotência e retomada testadas, ou ausência verificada de tarefas.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há controle de execução, mas retomada e duplicação não foram plenamente testadas.
+      risk: yellow
+      rationale: Existe atendimento parcial. Escala horizontal pode duplicar efeitos e comprometer janelas de processamento.
+      mitigation: Separar tarefas, coordenar execução e testar checkpoints e reprocessamento.
+    - order: 3
+      text: Cada réplica dispara o mesmo lote ou falhas exigem reinício integral inseguro.
+      risk: red
+      rationale: Escala horizontal pode duplicar efeitos e comprometer janelas de processamento.
+      mitigation: Separar tarefas, coordenar execução e testar checkpoints e reprocessamento.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: agendadores, locks, checkpoints e reinício de lotes.'
+  - order: 4
+    text: '[EST04] A aplicação depende de identidade ou recursos fixos de uma máquina?'
+    explanation: 'Evidências: hostnames, IPs, caches, bibliotecas nativas e licenças. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Dependências são portáveis e caches são reconstruíveis ou coordenados.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Existem dependências específicas com alternativa identificada.
+      risk: yellow
+      rationale: Existe atendimento parcial. Agendamento em outro nó pode impedir a execução ou produzir inconsistências.
+      mitigation: Inventariar vínculos de infraestrutura e provar a portabilidade em outro nó.
+    - order: 3
+      text: Há dependência rígida de máquina, IP, dispositivo ou cache local insubstituível.
+      risk: red
+      rationale: Agendamento em outro nó pode impedir a execução ou produzir inconsistências.
+      mitigation: Inventariar vínculos de infraestrutura e provar a portabilidade em outro nó.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: hostnames, IPs, caches, bibliotecas nativas e licenças.'
+- order: 7
+  name: 07. Observabilidade e operação
+  comment: Relacionar sinais técnicos à conclusão correta dos processos de negócio.
+  questions:
+  - order: 1
+    text: '[OBS01] Os logs permitem investigar uma operação ponta a ponta?'
+    explanation: 'Evidências: logs estruturados, centralização e identificadores de correlação. Considere o estado
+      atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e
+      registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Logs são centralizados e correlacionáveis, com proteção de dados sensíveis.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Logs existem, mas correlação ou cobertura são parciais.
+      risk: yellow
+      rationale: Existe atendimento parcial. A investigação pode exceder a janela de recuperação aceitável.
+      mitigation: Padronizar logs, correlação e acesso com retenção definida.
+    - order: 3
+      text: Logs ficam dispersos ou não permitem reconstruir uma falha.
+      risk: red
+      rationale: A investigação pode exceder a janela de recuperação aceitável.
+      mitigation: Padronizar logs, correlação e acesso com retenção definida.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: logs estruturados, centralização e identificadores de correlação.'
+  - order: 2
+    text: '[OBS02] Há métricas e alertas ligados ao serviço prestado?'
+    explanation: 'Evidências: SLIs, SLOs, latência, erros, filas e conclusão de operações. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Há indicadores de negócio e técnicos, metas e alertas acionáveis.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há métricas de infraestrutura, mas pouca visibilidade de resultados.
+      risk: yellow
+      rationale: Existe atendimento parcial. Saúde de infraestrutura não garante conclusão correta do processo.
+      mitigation: Definir indicadores por jornada e alertas com responsável e procedimento.
+    - order: 3
+      text: Falhas são percebidas principalmente por reclamações.
+      risk: red
+      rationale: Saúde de infraestrutura não garante conclusão correta do processo.
+      mitigation: Definir indicadores por jornada e alertas com responsável e procedimento.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: SLIs, SLOs, latência, erros, filas e conclusão de operações.'
+  - order: 3
+    text: '[OBS03] É possível localizar gargalos entre componentes?'
+    explanation: 'Evidências: traces, perfis e medidas de dependências. Considere o estado atual comprovado, não
+      apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Há rastreabilidade suficiente para localizar latência e falhas, distribuída quando necessária.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Algumas dependências têm rastreio, mas faltam trechos críticos.
+      risk: yellow
+      rationale: Existe atendimento parcial. Mais serviços podem ampliar a dificuldade de diagnóstico.
+      mitigation: Instrumentar o caminho crítico e propagar contexto com cuidado aos dados sensíveis.
+    - order: 3
+      text: Não é possível localizar o componente responsável por falhas ou lentidão.
+      risk: red
+      rationale: Mais serviços podem ampliar a dificuldade de diagnóstico.
+      mitigation: Instrumentar o caminho crítico e propagar contexto com cuidado aos dados sensíveis.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: traces, perfis e medidas de dependências.'
+  - order: 4
+    text: '[OBS04] A equipe consegue responder e recuperar o serviço de forma repetível?'
+    explanation: 'Evidências: runbooks, exercícios de incidente, backup e restauração. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Há responsáveis e procedimentos exercitados de recuperação e restauração.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Procedimentos existem, mas não foram exercitados integralmente.
+      risk: yellow
+      rationale: Existe atendimento parcial. A existência de cópias não comprova recuperação do serviço.
+      mitigation: Executar exercícios de recuperação e registrar tempos e lacunas.
+    - order: 3
+      text: Recuperação depende de improviso ou backup sem restauração comprovada.
+      risk: red
+      rationale: A existência de cópias não comprova recuperação do serviço.
+      mitigation: Executar exercícios de recuperação e registrar tempos e lacunas.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: runbooks, exercícios de incidente, backup e restauração.'
+- order: 8
+  name: 08. Segurança, acesso e proteção da informação
+  comment: Avalia controles técnicos; não constitui certificação jurídica ou de conformidade.
+  questions:
+  - order: 1
+    text: '[SEG01] Identidade e autorização protegem cada operação e conjunto de dados?'
+    explanation: 'Evidências: federação de identidade, papéis e testes de autorização. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Há identidade gerida, menor privilégio e autorização validada no servidor por operação e escopo.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Controles existem, mas são inconsistentes entre módulos ou serviços.
+      risk: yellow
+      rationale: Existe atendimento parcial. Falhas de autorização podem permitir acesso indevido a informações
+        fazendárias.
+      mitigation: Centralizar identidade e testar autorização por perfil, operação e escopo de dados.
+    - order: 3
+      text: Há contas compartilhadas ou operações sensíveis sem autorização efetiva.
+      risk: red
+      rationale: Falhas de autorização podem permitir acesso indevido a informações fazendárias.
+      mitigation: Centralizar identidade e testar autorização por perfil, operação e escopo de dados.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: federação de identidade, papéis e testes de autorização.'
+  - order: 2
+    text: '[SEG02] Segredos e certificados têm ciclo de vida controlado?'
+    explanation: 'Evidências: armazenamento de credenciais, rotação e vencimentos. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Segredos são externos ao código e à imagem, com acesso restrito e rotação testada.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há armazenamento externo, mas rotação ou controle de acesso é parcial.
+      risk: yellow
+      rationale: Existe atendimento parcial. Vazamentos e vencimentos podem causar incidentes e interrupções.
+      mitigation: Remover segredos de artefatos e implantar gestão, rotação e alertas de certificado.
+    - order: 3
+      text: Credenciais estão no código, imagem ou configuração exposta.
+      risk: red
+      rationale: Vazamentos e vencimentos podem causar incidentes e interrupções.
+      mitigation: Remover segredos de artefatos e implantar gestão, rotação e alertas de certificado.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: armazenamento de credenciais, rotação e vencimentos.'
+  - order: 3
+    text: '[SEG03] Dados sensíveis são protegidos em trânsito, armazenamento e ambientes de teste?'
+    explanation: 'Evidências: classificação, criptografia, acesso, mascaramento e retenção. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Controles proporcionais à classificação estão implementados e verificados.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: A classificação ou parte dos controles está incompleta.
+      risk: yellow
+      rationale: Existe atendimento parcial. A modernização pode ampliar a superfície de exposição dos dados.
+      mitigation: Classificar dados e fechar lacunas de proteção e minimização em cada fluxo.
+    - order: 3
+      text: Dados sensíveis são expostos em tráfego, testes, logs ou acessos amplos.
+      risk: red
+      rationale: A modernização pode ampliar a superfície de exposição dos dados.
+      mitigation: Classificar dados e fechar lacunas de proteção e minimização em cada fluxo.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: classificação, criptografia, acesso, mascaramento e retenção.'
+  - order: 4
+    text: '[SEG04] Operações sensíveis deixam trilha de auditoria confiável?'
+    explanation: 'Evidências: eventos de acesso e alteração, integridade e consulta da trilha. Considere o estado
+      atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e
+      registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: A trilha identifica ator, ação e resultado, com acesso controlado e proteção contra alteração.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há trilha parcial ou retenção e integridade ainda não demonstradas.
+      risk: yellow
+      rationale: Existe atendimento parcial. Incidentes e alterações indevidas podem não ser apuráveis.
+      mitigation: Definir eventos auditáveis e armazenamento protegido sem registrar segredos ou conteúdo desnecessário.
+    - order: 3
+      text: Não é possível atribuir operações sensíveis ou a trilha é facilmente alterável.
+      risk: red
+      rationale: Incidentes e alterações indevidas podem não ser apuráveis.
+      mitigation: Definir eventos auditáveis e armazenamento protegido sem registrar segredos ou conteúdo desnecessário.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: eventos de acesso e alteração, integridade e consulta da trilha.'
+- order: 9
+  name: 09. Automação e cadeia de entrega
+  comment: Verificar reprodutibilidade e controles de entrega, independentemente da ferramenta escolhida.
+  questions:
+  - order: 1
+    text: '[AUT01] O build pode ser reproduzido a partir do repositório?'
+    explanation: 'Evidências: pipeline, dependências, versões de runtime e artefatos. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Build automatizado usa dependências controladas e gera artefato rastreável.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há automação parcial com dependências ou etapas manuais.
+      risk: yellow
+      rationale: Existe atendimento parcial. A migração pode ficar bloqueada por dependências não reproduzíveis.
+      mitigation: Versionar instruções e dependências e reconstruir em ambiente limpo.
+    - order: 3
+      text: Só uma estação ou servidor não documentado consegue gerar o pacote.
+      risk: red
+      rationale: A migração pode ficar bloqueada por dependências não reproduzíveis.
+      mitigation: Versionar instruções e dependências e reconstruir em ambiente limpo.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: pipeline, dependências, versões de runtime e artefatos.'
+  - order: 2
+    text: '[AUT02] Implantação e configuração são reproduzíveis entre ambientes?'
+    explanation: 'Evidências: manifests, parâmetros, infraestrutura e histórico de mudanças. Considere o estado
+      atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e
+      registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Definições versionadas e promoção do mesmo artefato controlam diferenças.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há scripts, mas parte da configuração é manual.
+      risk: yellow
+      rationale: Existe atendimento parcial. Diferenças de ambiente podem causar falhas difíceis de repetir.
+      mitigation: Versionar implantação e separar configuração e segredos do artefato.
+    - order: 3
+      text: Implantações dependem de ajustes manuais não rastreados.
+      risk: red
+      rationale: Diferenças de ambiente podem causar falhas difíceis de repetir.
+      mitigation: Versionar implantação e separar configuração e segredos do artefato.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: manifests, parâmetros, infraestrutura e histórico de mudanças.'
+  - order: 3
+    text: '[AUT03] Há estratégia testada de entrega e recuperação de uma versão?'
+    explanation: 'Evidências: smoke tests, rollout, compatibilidade de dados e rollback. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Entrega progressiva ou controlada e recuperação foram testadas inclusive para dados.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há rollback do binário, mas compatibilidade ou validação é parcial.
+      risk: yellow
+      rationale: Existe atendimento parcial. Reverter apenas a imagem pode não recuperar dados ou contratos alterados.
+      mitigation: Ensaiar rollout, critérios de interrupção e recuperação completa.
+    - order: 3
+      text: A atualização é irreversível ou depende de correções emergenciais em produção.
+      risk: red
+      rationale: Reverter apenas a imagem pode não recuperar dados ou contratos alterados.
+      mitigation: Ensaiar rollout, critérios de interrupção e recuperação completa.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: smoke tests, rollout, compatibilidade de dados e rollback.'
+  - order: 4
+    text: '[AUT04] A cadeia de software controla vulnerabilidades e componentes?'
+    explanation: 'Evidências: inventário de componentes, análise de imagens e dependências e política de correção.
+      Considere o estado atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior
+      risco material e registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Artefatos são rastreáveis e verificados e há processo de correção com responsáveis.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há verificações, mas exceções ou correções não são geridas de forma consistente.
+      risk: yellow
+      rationale: Existe atendimento parcial. A automação pode disseminar artefatos vulneráveis rapidamente.
+      mitigation: Inventariar componentes, verificar artefatos e priorizar correções com prazos e responsáveis.
+    - order: 3
+      text: Componentes sem suporte ou vulnerabilidades relevantes permanecem sem tratamento.
+      risk: red
+      rationale: A automação pode disseminar artefatos vulneráveis rapidamente.
+      mitigation: Inventariar componentes, verificar artefatos e priorizar correções com prazos e responsáveis.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: inventário de componentes, análise de imagens e dependências
+        e política de correção.'
+- order: 10
+  name: 10. Testes e confiança na mudança
+  comment: Cobrir correção de regras, interoperabilidade, volume e falhas.
+  questions:
+  - order: 1
+    text: '[TST01] As regras fazendárias críticas têm testes de regressão confiáveis?'
+    explanation: 'Evidências: casos aprovados pelo negócio, limites, datas e arredondamentos. Considere o estado
+      atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e
+      registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Testes automatizados cobrem regras críticas e casos de borda representativos.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há testes parciais ou dependência relevante de validação manual.
+      risk: yellow
+      rationale: Existe atendimento parcial. Refatoração pode alterar cálculos e decisões sem detecção.
+      mitigation: Criar testes de caracterização e casos aprovados com dados sintéticos representativos.
+    - order: 3
+      text: Regras críticas não têm regressão repetível.
+      risk: red
+      rationale: Refatoração pode alterar cálculos e decisões sem detecção.
+      mitigation: Criar testes de caracterização e casos aprovados com dados sintéticos representativos.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: casos aprovados pelo negócio, limites, datas e arredondamentos.'
+  - order: 2
+    text: '[TST02] Os contratos e integrações são verificados antes da entrega?'
+    explanation: 'Evidências: testes de contrato, integração e ambientes representativos. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Interfaces críticas e seus consumidores são verificados automaticamente.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há testes para parte das integrações ou apenas cenários felizes.
+      risk: yellow
+      rationale: Existe atendimento parcial. Mudanças locais podem quebrar fluxos de ponta a ponta.
+      mitigation: Automatizar contratos e cenários de erro das integrações críticas.
+    - order: 3
+      text: Integrações só são validadas em produção ou por tentativa manual.
+      risk: red
+      rationale: Mudanças locais podem quebrar fluxos de ponta a ponta.
+      mitigation: Automatizar contratos e cenários de erro das integrações críticas.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: testes de contrato, integração e ambientes representativos.'
+  - order: 3
+    text: '[TST03] O desempenho foi validado com volume e concorrência representativos?'
+    explanation: 'Evidências: testes de pico, filas, banco, duração de lotes e recursos. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Metas são atingidas em testes representativos com margem conhecida.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há testes limitados sem representar os maiores picos ou volumes.
+      risk: yellow
+      rationale: Existe atendimento parcial. A arquitetura pode não suportar vencimentos e lotes de grande volume.
+      mitigation: Ensaiar carga realista e medir gargalos antes de definir a escala.
+    - order: 3
+      text: Não há testes ou as metas críticas falham sem plano.
+      risk: red
+      rationale: A arquitetura pode não suportar vencimentos e lotes de grande volume.
+      mitigation: Ensaiar carga realista e medir gargalos antes de definir a escala.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: testes de pico, filas, banco, duração de lotes e recursos.'
+  - order: 4
+    text: '[TST04] Reinícios e falhas parciais preservam o resultado de negócio?'
+    explanation: 'Evidências: testes de perda de pod, nó, dependência e recuperação. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Testes comprovam recuperação e ausência de perda ou duplicação indevida.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há testes de reinício, mas faltam falhas de dependências ou conciliação.
+      risk: yellow
+      rationale: Existe atendimento parcial. Disponibilidade aparente pode ocultar operações incorretas.
+      mitigation: Testar falhas controladas e reconciliar os efeitos de negócio após a recuperação.
+    - order: 3
+      text: Falhas causam perda, duplicação ou estado inconsistente sem tratamento.
+      risk: red
+      rationale: Disponibilidade aparente pode ocultar operações incorretas.
+      mitigation: Testar falhas controladas e reconciliar os efeitos de negócio após a recuperação.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: testes de perda de pod, nó, dependência e recuperação.'
+- order: 11
+  name: '11. Prontidão para OpenShift: execução'
+  comment: Avaliar na configuração de segurança e infraestrutura do cluster de destino.
+  questions:
+  - order: 1
+    text: '[OCP01] A imagem executa com as restrições de segurança previstas no cluster?'
+    explanation: 'Evidências: teste com usuário não root, UID permitido e permissões de arquivos. Considere o estado
+      atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e
+      registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: A imagem foi testada sem privilégios adicionais e com permissões adequadas ao destino.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há ajustes conhecidos de permissões ou usuário ainda não validados.
+      risk: yellow
+      rationale: Existe atendimento parcial. Dependências de privilégio dificultam a implantação segura.
+      mitigation: Adaptar permissões e imagem e testar com as políticas do cluster de destino.
+    - order: 3
+      text: A execução depende de root, privilégios ou acesso ao host sem solução aprovada.
+      risk: red
+      rationale: Dependências de privilégio dificultam a implantação segura.
+      mitigation: Adaptar permissões e imagem e testar com as políticas do cluster de destino.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: teste com usuário não root, UID permitido e permissões de
+        arquivos.'
+  - order: 2
+    text: '[OCP02] A aplicação sinaliza corretamente início, prontidão e falha?'
+    explanation: 'Evidências: startup, readiness e liveness e testes de inicialização. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Sinais são adequados e testados; falha externa não causa reinícios em cascata.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Existem verificações, mas seus limites ou comportamento não foram validados.
+      risk: yellow
+      rationale: Existe atendimento parcial. Tráfego pode chegar antes da prontidão ou reinícios podem agravar falhas.
+      mitigation: Definir probes adequadas e testar inicialização lenta e dependências indisponíveis.
+    - order: 3
+      text: Não há sinais confiáveis ou verificações causam indisponibilidade.
+      risk: red
+      rationale: Tráfego pode chegar antes da prontidão ou reinícios podem agravar falhas.
+      mitigation: Definir probes adequadas e testar inicialização lenta e dependências indisponíveis.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: startup, readiness e liveness e testes de inicialização.'
+  - order: 3
+    text: '[OCP03] O processo encerra de forma segura durante atualização ou remoção do pod?'
+    explanation: 'Evidências: SIGTERM, drenagem de tráfego e conclusão de tarefas. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Encerramento respeita o prazo, drena tráfego e preserva operações.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há encerramento controlado, mas tarefas longas ou prazo não foram testados.
+      risk: yellow
+      rationale: Existe atendimento parcial. Atualizações comuns podem interromper transações em andamento.
+      mitigation: Implementar shutdown gracioso e retomada e ajustar o período de término.
+    - order: 3
+      text: O processo é interrompido com perda de trabalho ou inconsistência.
+      risk: red
+      rationale: Atualizações comuns podem interromper transações em andamento.
+      mitigation: Implementar shutdown gracioso e retomada e ajustar o período de término.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: SIGTERM, drenagem de tráfego e conclusão de tarefas.'
+  - order: 4
+    text: '[OCP04] Recursos e capacidade estão dimensionados e observados?'
+    explanation: 'Evidências: requests, limits, memória, CPU e testes de escala. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Recursos são medidos e limites e estratégia de escala foram testados.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há estimativas, mas falta validação de saturação ou memória.
+      risk: yellow
+      rationale: Existe atendimento parcial. A aplicação pode ser reiniciada ou degradar outros workloads.
+      mitigation: Medir consumo e validar limites, concorrência e escala sob carga.
+    - order: 3
+      text: Não há dimensionamento ou ocorrem falta de memória e contenção recorrentes.
+      risk: red
+      rationale: A aplicação pode ser reiniciada ou degradar outros workloads.
+      mitigation: Medir consumo e validar limites, concorrência e escala sob carga.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: requests, limits, memória, CPU e testes de escala.'
+- order: 12
+  name: '12. Prontidão para OpenShift: plataforma e transição'
+  comment: Banco externo e arquitetura híbrida são opções válidas quando os requisitos são atendidos.
+  questions:
+  - order: 1
+    text: '[PLT01] Rede, entrada de tráfego e acesso às dependências funcionam no destino?'
+    explanation: 'Evidências: DNS, TLS, rotas, proxy, egress e políticas de rede. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Conectividade e restrições foram testadas com as dependências reais ou equivalentes.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Existe desenho, mas parte das rotas ou regras está pendente.
+      risk: yellow
+      rationale: Existe atendimento parcial. Uma imagem funcional pode falhar por dependências de rede.
+      mitigation: Validar fluxos e certificados e implementar somente os acessos necessários.
+    - order: 3
+      text: A execução depende de conectividade inexistente ou não autorizada.
+      risk: red
+      rationale: Uma imagem funcional pode falhar por dependências de rede.
+      mitigation: Validar fluxos e certificados e implementar somente os acessos necessários.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: DNS, TLS, rotas, proxy, egress e políticas de rede.'
+  - order: 2
+    text: '[PLT02] Persistência e acesso ao banco atendem às metas no destino?'
+    explanation: 'Evidências: latência, conexões, storage, backup e recuperação. Considere o estado atual comprovado,
+      não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre a justificativa
+      na revisão.'
+    answers:
+    - order: 1
+      text: Armazenamento e banco interno ou externo atendem aos testes e metas.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há solução definida, mas desempenho ou recuperação ainda não foi comprovado.
+      risk: yellow
+      rationale: Existe atendimento parcial. Mover a aplicação pode degradar operações dependentes de dados.
+      mitigation: Testar latência e pools e validar persistência e recuperação na topologia escolhida.
+    - order: 3
+      text: Não há solução viável de persistência ou a latência impede o serviço.
+      risk: red
+      rationale: Mover a aplicação pode degradar operações dependentes de dados.
+      mitigation: Testar latência e pools e validar persistência e recuperação na topologia escolhida.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: latência, conexões, storage, backup e recuperação.'
+  - order: 3
+    text: '[PLT03] Disponibilidade suporta manutenção e falha da infraestrutura?'
+    explanation: 'Evidências: réplicas, distribuição, orçamento de interrupção e teste de perda de nó. Considere
+      o estado atual comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material
+      e registre a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: O desenho foi testado e atende às metas de disponibilidade.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há redundância parcial ou desenho ainda não testado.
+      risk: yellow
+      rationale: Existe atendimento parcial. Falha de nó ou manutenção pode exceder a indisponibilidade aceita.
+      mitigation: Testar distribuição de réplicas e manutenção conforme as metas do serviço.
+    - order: 3
+      text: Uma falha simples interrompe o serviço além do tolerado.
+      risk: red
+      rationale: Falha de nó ou manutenção pode exceder a indisponibilidade aceita.
+      mitigation: Testar distribuição de réplicas e manutenção conforme as metas do serviço.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: réplicas, distribuição, orçamento de interrupção e teste de
+        perda de nó.'
+  - order: 4
+    text: '[PLT04] A entrada em produção tem critérios de aceite e plano operacional?'
+    explanation: 'Evidências: piloto, runbook, capacidade de suporte e decisão de entrada. Considere o estado atual
+      comprovado, não apenas planos. Se houver situações diferentes, selecione a de maior risco material e registre
+      a justificativa na revisão.'
+    answers:
+    - order: 1
+      text: Há aceite técnico e de negócio, suporte preparado e plano de recuperação validado.
+      risk: green
+      rationale: A condição descrita reduz o risco neste aspecto; confirme com as evidências solicitadas.
+      mitigation: Manter a prática e revalidar após mudanças relevantes.
+    - order: 2
+      text: Há plano, mas faltam evidências, responsáveis ou exercícios.
+      risk: yellow
+      rationale: Existe atendimento parcial. A entrega pode transferir riscos não tratados para a operação.
+      mitigation: Executar piloto e revisão de prontidão com responsáveis e critérios mensuráveis.
+    - order: 3
+      text: Há previsão de entrada sem critérios de aceite e suporte preparado.
+      risk: red
+      rationale: A entrega pode transferir riscos não tratados para a operação.
+      mitigation: Executar piloto e revisão de prontidão com responsáveis e critérios mensuráveis.
+    - order: 4
+      text: Não sabemos ou não temos evidências suficientes.
+      risk: unknown
+      rationale: A falta de evidência impede avaliar este aspecto com segurança.
+      mitigation: 'Envolver o responsável e levantar: piloto, runbook, capacidade de suporte e decisão de entrada.'
+thresholds:
+  red: 5
+  yellow: 30
+  unknown: 10
+riskMessages:
+  red: Há riscos relevantes que exigem plano de tratamento antes da modernização. Revisar respostas críticas e priorizar
+    redução de acoplamento, integridade, segurança e continuidade.
+  yellow: Há lacunas que exigem ações e validação em piloto. Definir responsáveis e critérios de aceite antes de
+    ampliar a migração.
+  green: Os riscos declarados ficaram abaixo dos limiares. Confirmar evidências e itens críticos; o resultado não
+    certifica produção nem exige microserviços.
+  unknown: Há informação insuficiente para uma decisão confiável. Realizar descoberta com especialistas antes de
+    definir esforço e estratégia.
