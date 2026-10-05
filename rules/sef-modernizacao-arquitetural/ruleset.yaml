@@ -1,0 +1,9 @@
+name: sefmg-modernizacao-arquitetural
+
+description: >
+  Regras específicas da SEF-MG para identificar acoplamento
+  arquitetural, dependências proprietárias, estado local e
+  características que dificultam modernização para OpenShift.
+
+labels:
+  - "sefmg.gov.br/finalidade=modernizacao-arquitetural"

@@ -1,0 +1,204 @@
+- ruleID: sefmg-websphere-proprietary-api-001
+
+  category: mandatory
+
+  effort: 5
+
+  description: >
+    Detecta utilização de APIs proprietárias do IBM WebSphere.
+
+  message: >
+    A aplicação utiliza APIs proprietárias do IBM WebSphere.
+    Essa dependência cria acoplamento com o application server
+    atual e deve ser eliminada ou substituída antes da migração
+    para uma plataforma cloud-native como OpenShift.
+
+  tag:
+    - "Arquitetura=Vendor Lock-in"
+    - "Modernizacao=WebSphere"
+    - "Modernizacao=Requer Refatoracao"
+
+  when:
+    java.referenced:
+      location: PACKAGE
+      pattern: com.ibm.websphere*
+
+- ruleID: sefmg-ear-monolith-001
+
+  category: potential
+
+  effort: 7
+
+  description: >
+    Identifica aplicações empacotadas como EAR que devem ser
+    avaliadas quanto à decomposição arquitetural.
+
+  message: >
+    Esta aplicação é empacotada como EAR. Avalie se os módulos
+    existentes representam domínios ou capacidades de negócio
+    que poderiam possuir ciclos de vida independentes.
+
+    Não significa automaticamente que a aplicação deva ser
+    convertida em microserviços. Entretanto, o empacotamento
+    monolítico deve ser analisado durante a modernização.
+
+  tag:
+    - "Arquitetura=Monolito"
+    - "Modernizacao=Candidato a Rearchitecture"
+    - "Cloud Native=Avaliar Decomposicao"
+
+  when:
+    builtin.filecontent:
+      filePattern: 'pom\.xml$'
+      pattern: '<packaging>\s*ear\s*</packaging>'
+
+- ruleID: sefmg-stateful-ejb-001
+
+  category: potential
+
+  effort: 7
+
+  description: >
+    Detecta Stateful Session Beans que mantêm estado associado
+    à instância da aplicação.
+
+  message: >
+    Foi encontrado um Stateful Session Bean.
+
+    Estado mantido dentro da instância da aplicação pode dificultar
+    escalabilidade horizontal, resiliência e execução em ambientes
+    distribuídos.
+
+    Avalie externalizar o estado para mecanismos apropriados como
+    banco de dados, cache distribuído ou outro serviço de persistência.
+
+  tag:
+    - "Arquitetura=Stateful"
+    - "Cloud Native=Externalizar Estado"
+    - "Modernizacao=Candidato a Rearchitecture"
+
+  when:
+    or:
+
+      - java.referenced:
+          location: ANNOTATION
+          pattern: javax.ejb.Stateful
+
+      - java.referenced:
+          location: ANNOTATION
+          pattern: jakarta.ejb.Stateful
+
+- ruleID: sefmg-explicit-jndi-001
+
+  category: potential
+
+  effort: 3
+
+  description: >
+    Detecta uso explícito de InitialContext/JNDI.
+
+  message: >
+    Foi identificado acesso explícito a JNDI através de InitialContext.
+
+    Avalie se essa dependência pode ser substituída por configuração
+    externalizada, injeção de dependência ou mecanismos independentes
+    do application server.
+
+  tag:
+    - "Arquitetura=Application Server Coupling"
+    - "Modernizacao=Externalizar Configuracao"
+
+  when:
+    java.referenced:
+      location: TYPE
+      pattern: javax.naming.InitialContext
+
+- ruleID: sefmg-local-filesystem-001
+
+  category: potential
+
+  effort: 3
+
+  description: >
+    Detecta referências a diretórios locais normalmente utilizados
+    para armazenamento persistente pela aplicação.
+
+  message: >
+    Foi encontrada uma referência explícita a filesystem local.
+
+    Verifique se a aplicação utiliza o filesystem da própria instância
+    para manter documentos, arquivos temporários ou estado persistente.
+
+    Em OpenShift, instâncias da aplicação devem ser tratadas como
+    efêmeras. Considere armazenamento persistente, Object Storage
+    ou externalização dos dados.
+
+  tag:
+    - "Cloud Native=Local Filesystem"
+    - "Arquitetura=Estado Local"
+    - "OpenShift=Revisar Persistencia"
+
+  when:
+    builtin.filecontent:
+      filePattern: '.*\.(java|properties|xml|yml|yaml)$'
+      pattern: '(/opt/|/var/|/home/|/data/)'
+
+- ruleID: sefmg-websphere-descriptor-001
+
+  category: mandatory
+
+  effort: 3
+
+  description: >
+    Detecta deployment descriptors específicos do IBM WebSphere.
+
+  message: >
+    Foi encontrado um deployment descriptor específico do WebSphere.
+
+    Configurações presentes neste arquivo precisam ser analisadas
+    e convertidas para mecanismos compatíveis com a plataforma alvo.
+
+  tag:
+    - "Arquitetura=WebSphere"
+    - "Modernizacao=Vendor Lock-in"
+
+  when:
+    builtin.file:
+      pattern: '.*ibm-(web|ejb-jar|application).*\.(xml|xmi)$'
+
+- ruleID: sefmg-controller-repository-001
+
+  category: potential
+
+  effort: 5
+
+  description: >
+    Identifica Controllers REST que possuem dependência direta
+    de classes da camada Repository.
+
+  message: >
+    Este REST Controller referencia diretamente a camada Repository.
+
+    Avalie se regras de negócio ou acesso a dados estão vazando para
+    a camada de apresentação.
+
+    Considere introduzir uma camada de serviço ou domínio entre
+    Controller e Repository.
+
+  tag:
+    - "Arquitetura=Layer Violation"
+    - "Arquitetura=High Coupling"
+    - "Modernizacao=Refactoring Candidate"
+
+  when:
+    and:
+
+      - java.referenced:
+          pattern: org.springframework.web.bind.annotation.RestController
+          location: ANNOTATION
+        as: controller
+
+      - java.referenced:
+          pattern: br.gov.mg.fazenda.repository*
+          location: PACKAGE
+          filepaths: "{{controller.Filepaths}}"
