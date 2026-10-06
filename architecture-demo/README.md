@@ -62,3 +62,20 @@ nem determina sozinho os limites ideais de microservicos.
 
 Saidas em `target/`: classes compiladas, JAR, metadados Maven e, em `target/architecture/`,
 `summary.dot`, `architecture-demo-1.0.0.jar.dot`, `packages.dot` e `dependencies.svg`.
+
+## Issues arquiteturais no MTA
+
+O ruleset [sef-architecture-coupling](../rules/sef-architecture-coupling/README.md)
+transforma as dependências desta mesma aplicação em issues de desacoplamento:
+referências entre domínios, instanciação de services concretos, uso de modelo
+de outro domínio e o ciclo conhecido. Dependências domínio → shared são permitidas.
+
+Na raiz do repositório:
+
+```bash
+ruby scripts/validate-architecture-rules.rb
+bash scripts/analyze-architecture-mta.sh
+```
+
+Consulte a documentação do ruleset para cobertura, resultados esperados,
+limites e situação da validação integrada com o provider Java.

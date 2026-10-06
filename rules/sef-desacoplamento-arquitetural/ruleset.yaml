@@ -1,0 +1,4 @@
+name: sefmg-architecture-coupling
+description: Acoplamento entre os dominios da architecture-demo e fronteiras para decomposicao do monolito.
+labels:
+  - "sefmg.gov.br/finalidade=desacoplamento-monolito"

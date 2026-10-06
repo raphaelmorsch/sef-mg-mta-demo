@@ -1,0 +1,507 @@
+# Política da architecture-demo. Escopo Maven src/main/java; caminhos seguem os pacotes.
+# MTA 8.3: extras.filepaths preserva a lista original de builtin.file.
+# O provider divide por espaço o primeiro elemento; a seção Mustache concatena os caminhos.
+# Use um checkout sem espaços no caminho (limitação do provider).
+# Nenhuma regra proíbe domínio → shared ou referências no próprio domínio.
+
+- ruleID: sefmg-coupling-contribuinte-to-debito-001
+  category: potential
+  effort: 5
+  description: "Acoplamento entre domínios: contribuinte → debito"
+  message: >-
+    O domínio contribuinte referencia diretamente debito. ContribuinteService instancia
+    DebitoService para quitar débitos. Extraia uma porta de regularização e mantenha a
+    implementação no domínio Débito. Esta direção participa do ciclo conhecido contribuinte →
+    debito → arrecadacao → contribuinte quando as outras duas arestas também existem. A
+    ocorrência isolada não comprova o ciclo. Uma interface só reduz acoplamento se o consumidor
+    depender do contrato; não substitua chamadas locais por HTTP sem avaliar os limites de
+    negócio.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+    - "sefmg.gov.br/source-domain=contribuinte"
+    - "sefmg.gov.br/destination-domain=debito"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/contribuinte/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.debito.*"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-coupling-contribuinte-to-arrecadacao-001
+  category: potential
+  effort: 5
+  description: "Acoplamento entre domínios: contribuinte → arrecadacao"
+  message: >-
+    O domínio contribuinte referencia diretamente arrecadacao. Revise a fronteira: para
+    services, introduza uma porta/API explícita; para repositories/DAO, delegue o acesso aos
+    dados ao domínio proprietário; para impl/internal, exponha um contrato; para modelos, use
+    identificadores ou DTOs de contrato. Uma interface só reduz acoplamento se o consumidor
+    depender do contrato; não substitua chamadas locais por HTTP sem avaliar os limites de
+    negócio.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+    - "sefmg.gov.br/source-domain=contribuinte"
+    - "sefmg.gov.br/destination-domain=arrecadacao"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/contribuinte/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.arrecadacao.*"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-coupling-contribuinte-to-notificacao-001
+  category: potential
+  effort: 5
+  description: "Acoplamento entre domínios: contribuinte → notificacao"
+  message: >-
+    O domínio contribuinte referencia diretamente notificacao. Revise a fronteira: para
+    services, introduza uma porta/API explícita; para repositories/DAO, delegue o acesso aos
+    dados ao domínio proprietário; para impl/internal, exponha um contrato; para modelos, use
+    identificadores ou DTOs de contrato. Uma interface só reduz acoplamento se o consumidor
+    depender do contrato; não substitua chamadas locais por HTTP sem avaliar os limites de
+    negócio.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+    - "sefmg.gov.br/source-domain=contribuinte"
+    - "sefmg.gov.br/destination-domain=notificacao"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/contribuinte/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.notificacao.*"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-coupling-debito-to-contribuinte-001
+  category: potential
+  effort: 5
+  description: "Acoplamento entre domínios: debito → contribuinte"
+  message: >-
+    O domínio debito referencia diretamente contribuinte. Revise a fronteira: para services,
+    introduza uma porta/API explícita; para repositories/DAO, delegue o acesso aos dados ao
+    domínio proprietário; para impl/internal, exponha um contrato; para modelos, use
+    identificadores ou DTOs de contrato. Uma interface só reduz acoplamento se o consumidor
+    depender do contrato; não substitua chamadas locais por HTTP sem avaliar os limites de
+    negócio.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+    - "sefmg.gov.br/source-domain=debito"
+    - "sefmg.gov.br/destination-domain=contribuinte"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/debito/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.contribuinte.*"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-coupling-debito-to-arrecadacao-001
+  category: potential
+  effort: 5
+  description: "Acoplamento entre domínios: debito → arrecadacao"
+  message: >-
+    O domínio debito referencia diretamente arrecadacao. DebitoService instancia
+    ArrecadacaoService. Defina um contrato para registrar pagamento; explicite consistência,
+    idempotência e tratamento de falhas antes de separar processos. Esta direção participa do
+    ciclo conhecido contribuinte → debito → arrecadacao → contribuinte quando as outras duas
+    arestas também existem. A ocorrência isolada não comprova o ciclo. Uma interface só reduz
+    acoplamento se o consumidor depender do contrato; não substitua chamadas locais por HTTP sem
+    avaliar os limites de negócio.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+    - "sefmg.gov.br/source-domain=debito"
+    - "sefmg.gov.br/destination-domain=arrecadacao"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/debito/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.arrecadacao.*"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-coupling-debito-to-notificacao-001
+  category: potential
+  effort: 5
+  description: "Acoplamento entre domínios: debito → notificacao"
+  message: >-
+    O domínio debito referencia diretamente notificacao. Revise a fronteira: para services,
+    introduza uma porta/API explícita; para repositories/DAO, delegue o acesso aos dados ao
+    domínio proprietário; para impl/internal, exponha um contrato; para modelos, use
+    identificadores ou DTOs de contrato. Uma interface só reduz acoplamento se o consumidor
+    depender do contrato; não substitua chamadas locais por HTTP sem avaliar os limites de
+    negócio.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+    - "sefmg.gov.br/source-domain=debito"
+    - "sefmg.gov.br/destination-domain=notificacao"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/debito/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.notificacao.*"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-coupling-arrecadacao-to-contribuinte-001
+  category: potential
+  effort: 5
+  description: "Acoplamento entre domínios: arrecadacao → contribuinte"
+  message: >-
+    O domínio arrecadacao referencia diretamente contribuinte. ArrecadacaoService reutiliza o
+    modelo Contribuinte. Passe um identificador ou DTO de contrato e mantenha o modelo de
+    domínio sob responsabilidade de Contribuinte. Esta direção participa do ciclo conhecido
+    contribuinte → debito → arrecadacao → contribuinte quando as outras duas arestas também
+    existem. A ocorrência isolada não comprova o ciclo. Uma interface só reduz acoplamento se o
+    consumidor depender do contrato; não substitua chamadas locais por HTTP sem avaliar os
+    limites de negócio.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+    - "sefmg.gov.br/source-domain=arrecadacao"
+    - "sefmg.gov.br/destination-domain=contribuinte"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/arrecadacao/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.contribuinte.*"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-coupling-arrecadacao-to-debito-001
+  category: potential
+  effort: 5
+  description: "Acoplamento entre domínios: arrecadacao → debito"
+  message: >-
+    O domínio arrecadacao referencia diretamente debito. Revise a fronteira: para services,
+    introduza uma porta/API explícita; para repositories/DAO, delegue o acesso aos dados ao
+    domínio proprietário; para impl/internal, exponha um contrato; para modelos, use
+    identificadores ou DTOs de contrato. Uma interface só reduz acoplamento se o consumidor
+    depender do contrato; não substitua chamadas locais por HTTP sem avaliar os limites de
+    negócio.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+    - "sefmg.gov.br/source-domain=arrecadacao"
+    - "sefmg.gov.br/destination-domain=debito"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/arrecadacao/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.debito.*"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-coupling-arrecadacao-to-notificacao-001
+  category: potential
+  effort: 5
+  description: "Acoplamento entre domínios: arrecadacao → notificacao"
+  message: >-
+    O domínio arrecadacao referencia diretamente notificacao. ArrecadacaoService instancia
+    NotificacaoService. Considere uma porta de notificação ou evento PagamentoRegistrado; defina
+    política de reentrega e idempotência. Uma interface só reduz acoplamento se o consumidor
+    depender do contrato; não substitua chamadas locais por HTTP sem avaliar os limites de
+    negócio.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+    - "sefmg.gov.br/source-domain=arrecadacao"
+    - "sefmg.gov.br/destination-domain=notificacao"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/arrecadacao/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.notificacao.*"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-coupling-notificacao-to-contribuinte-001
+  category: potential
+  effort: 5
+  description: "Acoplamento entre domínios: notificacao → contribuinte"
+  message: >-
+    O domínio notificacao referencia diretamente contribuinte. Revise a fronteira: para
+    services, introduza uma porta/API explícita; para repositories/DAO, delegue o acesso aos
+    dados ao domínio proprietário; para impl/internal, exponha um contrato; para modelos, use
+    identificadores ou DTOs de contrato. Uma interface só reduz acoplamento se o consumidor
+    depender do contrato; não substitua chamadas locais por HTTP sem avaliar os limites de
+    negócio.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+    - "sefmg.gov.br/source-domain=notificacao"
+    - "sefmg.gov.br/destination-domain=contribuinte"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/notificacao/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.contribuinte.*"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-coupling-notificacao-to-debito-001
+  category: potential
+  effort: 5
+  description: "Acoplamento entre domínios: notificacao → debito"
+  message: >-
+    O domínio notificacao referencia diretamente debito. Revise a fronteira: para services,
+    introduza uma porta/API explícita; para repositories/DAO, delegue o acesso aos dados ao
+    domínio proprietário; para impl/internal, exponha um contrato; para modelos, use
+    identificadores ou DTOs de contrato. Uma interface só reduz acoplamento se o consumidor
+    depender do contrato; não substitua chamadas locais por HTTP sem avaliar os limites de
+    negócio.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+    - "sefmg.gov.br/source-domain=notificacao"
+    - "sefmg.gov.br/destination-domain=debito"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/notificacao/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.debito.*"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-coupling-notificacao-to-arrecadacao-001
+  category: potential
+  effort: 5
+  description: "Acoplamento entre domínios: notificacao → arrecadacao"
+  message: >-
+    O domínio notificacao referencia diretamente arrecadacao. Revise a fronteira: para services,
+    introduza uma porta/API explícita; para repositories/DAO, delegue o acesso aos dados ao
+    domínio proprietário; para impl/internal, exponha um contrato; para modelos, use
+    identificadores ou DTOs de contrato. Uma interface só reduz acoplamento se o consumidor
+    depender do contrato; não substitua chamadas locais por HTTP sem avaliar os limites de
+    negócio.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+    - "sefmg.gov.br/source-domain=notificacao"
+    - "sefmg.gov.br/destination-domain=arrecadacao"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/notificacao/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.arrecadacao.*"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-construction-contribuinte-to-debito-001
+  category: potential
+  effort: 5
+  description: "Instanciação direta de implementação: DebitoService"
+  message: >-
+    contribuinte constrói DebitoService, controlando a implementação e seu ciclo de vida fora do
+    domínio proprietário. Injete uma porta definida pela fronteira de negócio e mova a
+    composição para a configuração da aplicação. Injeção da mesma classe concreta, sozinha, não
+    elimina a dependência entre domínios.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/contribuinte/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.debito.DebitoService"
+          location: CONSTRUCTOR_CALL
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-construction-debito-to-arrecadacao-001
+  category: potential
+  effort: 5
+  description: "Instanciação direta de implementação: ArrecadacaoService"
+  message: >-
+    debito constrói ArrecadacaoService, controlando a implementação e seu ciclo de vida fora do
+    domínio proprietário. Injete uma porta definida pela fronteira de negócio e mova a
+    composição para a configuração da aplicação. Injeção da mesma classe concreta, sozinha, não
+    elimina a dependência entre domínios.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/debito/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.arrecadacao.ArrecadacaoService"
+          location: CONSTRUCTOR_CALL
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-construction-arrecadacao-to-notificacao-001
+  category: potential
+  effort: 5
+  description: "Instanciação direta de implementação: NotificacaoService"
+  message: >-
+    arrecadacao constrói NotificacaoService, controlando a implementação e seu ciclo de vida
+    fora do domínio proprietário. Injete uma porta definida pela fronteira de negócio e mova a
+    composição para a configuração da aplicação. Injeção da mesma classe concreta, sozinha, não
+    elimina a dependência entre domínios.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/arrecadacao/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.notificacao.NotificacaoService"
+          location: CONSTRUCTOR_CALL
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-model-arrecadacao-to-contribuinte-001
+  category: potential
+  effort: 5
+  description: "Modelo de outro domínio usado por Arrecadação"
+  message: >-
+    Arrecadação depende do modelo interno Contribuinte. Defina um identificador ou DTO do
+    contrato e traduza para o modelo dentro do domínio proprietário. Esta referência fecha o
+    ciclo conhecido apenas se Contribuinte → Débito e Débito → Arrecadação também estiverem
+    presentes.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/arrecadacao/.*\\.java$"
+        as: origin
+        ignore: true
+      - java.referenced:
+          pattern: "br.gov.mg.sef.fiscal.contribuinte.Contribuinte"
+          location: TYPE
+          filepaths: ["{{#origin.extras.filepaths}}{{.}} {{/origin.extras.filepaths}}"]
+        from: origin
+
+- ruleID: sefmg-shared-to-domain-001
+  category: potential
+  effort: 5
+  description: "Shared depende de um domínio de negócio"
+  message: >-
+    Shared deve permanecer independente dos domínios. Mova a lógica específica para o domínio
+    proprietário ou inverta a dependência por contrato. Dependências domínio → shared são
+    permitidas por esta política; shared → domínio requer revisão.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+  when:
+    and:
+      - builtin.file:
+          pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/shared/.*\\.java$"
+        as: shared_files
+        ignore: true
+      - or:
+          - java.referenced:
+              pattern: "br.gov.mg.sef.fiscal.contribuinte.*"
+              location: TYPE
+              filepaths: ["{{#shared_files.extras.filepaths}}{{.}} {{/shared_files.extras.filepaths}}"]
+            from: shared_files
+          - java.referenced:
+              pattern: "br.gov.mg.sef.fiscal.debito.*"
+              location: TYPE
+              filepaths: ["{{#shared_files.extras.filepaths}}{{.}} {{/shared_files.extras.filepaths}}"]
+            from: shared_files
+          - java.referenced:
+              pattern: "br.gov.mg.sef.fiscal.arrecadacao.*"
+              location: TYPE
+              filepaths: ["{{#shared_files.extras.filepaths}}{{.}} {{/shared_files.extras.filepaths}}"]
+            from: shared_files
+          - java.referenced:
+              pattern: "br.gov.mg.sef.fiscal.notificacao.*"
+              location: TYPE
+              filepaths: ["{{#shared_files.extras.filepaths}}{{.}} {{/shared_files.extras.filepaths}}"]
+            from: shared_files
+
+- ruleID: sefmg-cycle-contribuinte-debito-arrecadacao-001
+  category: potential
+  effort: 8
+  description: "Ciclo entre três domínios: Contribuinte → Débito → Arrecadação → Contribuinte"
+  message: >-
+    As três direções do ciclo conhecido foram encontradas no escopo analisado. Priorize remover
+    a dependência do modelo Contribuinte em Arrecadação e extraia contratos para
+    quitação/pagamento. Confirme o ciclo no grafo jdeps após cada alteração. Esta regra
+    correlaciona referências estáticas entre pacotes, não demonstra recursão em execução nem
+    descobre ciclos arbitrários. Os incidentes também aparecem nas regras direcionais; não some
+    seus esforços como trabalhos independentes.
+  labels:
+    - "sefmg.gov.br/concern=monolith-decoupling"
+  when:
+    and:
+      - and:
+          - builtin.file:
+              pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/contribuinte/.*\\.java$"
+            as: cycle_0
+            ignore: true
+          - java.referenced:
+              pattern: "br.gov.mg.sef.fiscal.debito.*"
+              location: TYPE
+              filepaths: ["{{#cycle_0.extras.filepaths}}{{.}} {{/cycle_0.extras.filepaths}}"]
+            from: cycle_0
+      - and:
+          - builtin.file:
+              pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/debito/.*\\.java$"
+            as: cycle_1
+            ignore: true
+          - java.referenced:
+              pattern: "br.gov.mg.sef.fiscal.arrecadacao.*"
+              location: TYPE
+              filepaths: ["{{#cycle_1.extras.filepaths}}{{.}} {{/cycle_1.extras.filepaths}}"]
+            from: cycle_1
+      - and:
+          - builtin.file:
+              pattern: "(^|/)src/main/java/br/gov/mg/sef/fiscal/arrecadacao/.*\\.java$"
+            as: cycle_2
+            ignore: true
+          - java.referenced:
+              pattern: "br.gov.mg.sef.fiscal.contribuinte.*"
+              location: TYPE
+              filepaths: ["{{#cycle_2.extras.filepaths}}{{.}} {{/cycle_2.extras.filepaths}}"]
+            from: cycle_2
